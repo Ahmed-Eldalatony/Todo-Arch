@@ -66,3 +66,5 @@ const user1 = new User("hamada", true);
 user1.addTask({ taskName: "Task1", priority: Priority.HIGH });
 
 console.log(user1.getTasks());
+
+export { }; // Makes this file a module

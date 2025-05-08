@@ -75,3 +75,5 @@ regular = addTaskToUser(regular, { taskName: "Write docs", priority: Priority.LO
 
 console.log(`${admin.name} [${admin.role}]:`, getUserTasks(admin));
 console.log(`${regular.name} [${regular.role}]:`, getUserTasks(regular));
+
+export { }; // Makes this file a module

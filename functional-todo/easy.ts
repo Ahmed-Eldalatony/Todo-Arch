@@ -44,3 +44,4 @@ const updatedUser1 = addTask({ taskName: "Task1", priority: Priority.HIGH }, use
 
 console.log(updatedUser1);
 
+export { }; // Makes this file a module

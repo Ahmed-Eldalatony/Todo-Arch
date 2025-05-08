@@ -1,10 +1,8 @@
-// Priority Enum
 enum Priority {
   HIGH = "HIGH",
   LOW = "LOW",
 }
 
-// ITask Interface
 interface ITask {
   readonly id: string;
   taskName: string;
@@ -12,7 +10,6 @@ interface ITask {
   date: string;
 }
 
-// TaskInput Type
 type TaskInput = Pick<ITask, "taskName" | "priority">;
 
 // Custom Error
@@ -23,8 +20,9 @@ class NotLoggedInError extends Error {
   }
 }
 
-// Task Class
+// Task Class (Encapsulation + Factory Method)
 class Task implements ITask {
+  // More clear and Scalable
   readonly id: string;
   taskName: string;
   priority: Priority;
@@ -46,14 +44,14 @@ class Task implements ITask {
   }
 }
 
-// ITaskManager Interface
+// ITaskManager Interface (Abstraction)
 interface ITaskManager {
   addTask(task: TaskInput): void;
   getTasks(): ReadonlyArray<ITask>;
   findTaskById(id: string): ITask | undefined;
 }
 
-// TaskManager Implementation
+// TaskManager Class (Encapsulation + SRP)
 class TaskManager implements ITaskManager {
   private tasks: Task[] = [];
 
@@ -75,14 +73,14 @@ interface TaskFilterStrategy {
   filter(tasks: ReadonlyArray<ITask>): ITask[];
 }
 
-// Example Strategy: High Priority Only
+// Concrete Strategy: High Priority Filter
 class HighPriorityFilter implements TaskFilterStrategy {
   filter(tasks: ReadonlyArray<ITask>): ITask[] {
     return tasks.filter(task => task.priority === Priority.HIGH);
   }
 }
 
-// IUser Interface
+// IUser Interface (Interface Segregation)
 interface IUser {
   getName(): string;
   getRole(): string;
@@ -94,7 +92,7 @@ interface IUser {
   filterTasks(strategy: TaskFilterStrategy): ITask[];
 }
 
-// BaseUser Abstract Class
+// Abstract BaseUser Class (Template Method Pattern)
 abstract class BaseUser implements IUser {
   protected readonly name: string;
   protected loggedIn: boolean;
@@ -138,14 +136,14 @@ abstract class BaseUser implements IUser {
   }
 }
 
-// Regular User
+// RegularUser Class (Concrete Subclass)
 class RegularUser extends BaseUser {
   getRole(): string {
     return "Regular";
   }
 }
 
-// Admin User
+// AdminUser Class (Adds Specific Behavior)
 class AdminUser extends BaseUser {
   getRole(): string {
     return "Admin";
@@ -156,7 +154,7 @@ class AdminUser extends BaseUser {
   }
 }
 
-// UserFactory
+// UserFactory Class (Factory Pattern)
 class UserFactory {
   static createUser(role: "admin" | "regular", name: string): IUser {
     const taskManager = new TaskManager();
@@ -172,22 +170,22 @@ class UserFactory {
   }
 }
 
-// Create users
+// ---------- Usage Example ----------
+
 const admin = UserFactory.createUser("admin", "Alice");
 const regular = UserFactory.createUser("regular", "Bob");
 
-// Add tasks
 admin.addTask({ taskName: "Deploy API", priority: Priority.HIGH });
 admin.addTask({ taskName: "Review PRs", priority: Priority.LOW });
 
 regular.addTask({ taskName: "Write docs", priority: Priority.LOW });
 regular.addTask({ taskName: "Fix bugs", priority: Priority.HIGH });
 
-// Show tasks
 console.log(`${admin.getName()} [${admin.getRole()}]:`, admin.getTasks());
 console.log(`${regular.getName()} [${regular.getRole()}]:`, regular.getTasks());
 
-// Filter tasks (strategy pattern)
+// Using Strategy Pattern
 const highPriorityOnly = new HighPriorityFilter();
 console.log(`${regular.getName()}'s High Priority Tasks:`, regular.filterTasks(highPriorityOnly));
 
+export { }; // Makes this file a module
